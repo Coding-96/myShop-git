@@ -1,14 +1,60 @@
 import 'package:flutter/material.dart';
-import 'package:myshop/widgets/product_item.dart';
-import '../providers/product.dart';
-import '../widgets/products_grid.dart';
+import 'package:provider/provider.dart';
 
-class ProductsOverveiwScreen extends StatelessWidget {
+
+import '../providers/product.dart';
+import '../providers/cart.dart';
+import '../widgets/products_grid.dart';
+import '../widgets/badge.dart';
+
+
+enum FliterOptions{
+  onlyFavorties,
+  showAll,
+}
+
+class ProductsOverveiwScreen extends StatefulWidget {
+  @override
+  State<ProductsOverveiwScreen> createState() => _ProductsOverveiwScreenState();
+}
+
+class _ProductsOverveiwScreenState extends State<ProductsOverveiwScreen> {
+   var _showOnlyFavortie= false;
+
   @override
   Widget build(BuildContext context) {
+   
     return Scaffold(
-      appBar: AppBar(title: Text("MyShop")),
-      body: products_grid(),
+      appBar: AppBar(
+        actions:<Widget> [
+          PopupMenuButton(
+            icon: Icon(Icons.more_vert),
+            onSelected: (FliterOptions selectedValue){
+              setState(() {
+                if(selectedValue ==FliterOptions.onlyFavorties){
+                _showOnlyFavortie=true;
+
+              }
+              else{
+               _showOnlyFavortie=false;
+              }
+              });
+            } ,
+            itemBuilder: ((_) =>[
+            PopupMenuItem(child: Text("only Favorites") , value: FliterOptions.onlyFavorties,),
+            PopupMenuItem(child: Text("ShowAll") , value: FliterOptions.showAll),
+          ] )),
+          Consumer<Cart>(
+            builder: (cxt, cart, ch) =>Badge(
+              child: ch!, 
+              value: cart.itemsCount.toString(),
+              ), 
+              child: Icon(Icons.shopping_cart),
+            ),
+        ],
+        title: Text("MyShop"),
+        ),
+      body: products_grid(_showOnlyFavortie),
     );
   }
 }
