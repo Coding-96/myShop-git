@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myshop/screens/cart_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/product.dart';
@@ -48,7 +49,14 @@ class _ProductsOverveiwScreenState extends State<ProductsOverveiwScreen> {
               child: ch!,
               value: cart.itemsCount.toString(),
             ),
-            child: Icon(Icons.shopping_cart),
+            child: IconButton(
+              icon: Icon(
+                Icons.shopping_cart,
+              ),
+              onPressed: () {
+                Navigator.of(context).pushNamed(CartScreen.rotueName);
+              },
+            ),
           ),
         ],
         title: Text("MyShop"),
